@@ -137,10 +137,15 @@ def make_arrays(nb_rows, img_size):
     return dataset, labels
 
 
-def reformat(data, image_size, num_of_channels, num_of_classes):
-    data.train_dataset = data.train_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
-    data.valid_dataset = data.valid_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
-    data.test_dataset = data.test_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
+def reformat(data, image_size, num_of_channels, num_of_classes, flatten=True):
+    if flatten:
+        data.train_dataset = data.train_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
+        data.valid_dataset = data.valid_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
+        data.test_dataset = data.test_dataset.reshape((-1, image_size * image_size * num_of_channels)).astype(np.float32)
+    else:
+        data.train_dataset = data.train_dataset.reshape((-1, image_size, image_size, num_of_channels)).astype(np.float32)
+        data.valid_dataset = data.valid_dataset.reshape((-1, image_size, image_size, num_of_channels)).astype(np.float32)
+        data.test_dataset = data.test_dataset.reshape((-1, image_size, image_size, num_of_channels)).astype(np.float32)
 
     # Map 0 to [1.0, 0.0, 0.0 ...], 1 to [0.0, 1.0, 0.0 ...]
     data.train_labels = (np.arange(num_of_classes) == data.train_labels[:, None]).astype(np.float32)

@@ -10,8 +10,6 @@ import logmanager
 batch_size = 128
 num_steps = 10000
 learning_rate = 0.3
-relu_layers = 64
-
 data_showing_step = 500
 
 
@@ -87,4 +85,4 @@ with tf.Session(graph=graph) as session:
             acc_val = accuracy(valid_prediction.eval(), dataset.valid_labels)
             logmanager.logger.info('# %03d  Acc Train: %03.2f%%  Acc Val: %03.2f%% Loss %f' % (
                 step, acc_minibatch, acc_val, l))
-    print("Test accuracy: %.1f%%" % accuracy(test_prediction.eval(), dataset.test_labels))
+    logmanager.logger.info("Test accuracy: %.1f%%" % accuracy(test_prediction.eval(), dataset.test_labels))
