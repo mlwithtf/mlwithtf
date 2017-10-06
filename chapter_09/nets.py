@@ -13,10 +13,10 @@ def _conv2d(input_data, k_h, k_w, c_o, s_h, s_w, name, relu=True, padding="SAME"
     convolve = lambda i, k: tf.nn.conv2d(i, k, [1, s_h, s_w, 1], padding=padding)
     with tf.variable_scope(name) as scope:
         tf.Variable
-        weights = tf.get_variable(name="weights", shape=[k_h, k_w, c_i, c_o],
+        weights = tf.get_variable(name="kernel", shape=[k_h, k_w, c_i, c_o],
                                   initializer=tf.truncated_normal_initializer(stddev=1e-1, dtype=tf.float32))
         conv = convolve(input_data, weights)
-        biases = tf.get_variable(name="biases", shape=[c_o], dtype=tf.float32,
+        biases = tf.get_variable(name="bias", shape=[c_o], dtype=tf.float32,
                                  initializer=tf.constant_initializer(value=0.0))
         output = tf.nn.bias_add(conv, biases)
         if relu:
@@ -39,9 +39,9 @@ def _fully_connected(input_data, num_output, name, relu=True):
             feed_in = tf.reshape(input_data, [-1, dim])
         else:
             feed_in, dim = (input_data, input_shape[-1].value)
-        weights = tf.get_variable(name="weights", shape=[dim, num_output],
+        weights = tf.get_variable(name="kernel", shape=[dim, num_output],
                                   initializer=tf.truncated_normal_initializer(stddev=1e-1, dtype=tf.float32))
-        biases = tf.get_variable(name="biases", shape=[num_output], dtype=tf.float32,
+        biases = tf.get_variable(name="bias", shape=[num_output], dtype=tf.float32,
                                  initializer=tf.constant_initializer(value=0.0))
         op = tf.nn.relu_layer if relu else tf.nn.xw_plus_b
         output = op(feed_in, weights, biases, name=scope.name)
@@ -83,7 +83,7 @@ def inference(images, is_training=False):
     fc7 = _fully_connected(fc6, 4096, name="fc7")
     if is_training:
         fc7 = tf.nn.dropout(fc7, keep_prob=0.5)
-    fc8 = _fully_connected(fc7, 37, name='fc8-pets', relu=False)
+    fc8 = _fully_connected(fc7, 1000, name='fc8', relu=False)
     return fc8
 
 
