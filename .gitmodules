@@ -1,0 +1,6 @@
+[submodule "chapter_06/cnn-text-classification-tf"]
+	path = chapter_06/cnn-text-classification-tf
+	url = https://github.com/mlwithtf/cnn-text-classification-tf
+[submodule "chapter_11/caffe-tensorflow"]
+	path = chapter_11/caffe-tensorflow
+	url = https://github.com/mlwithtf/caffe-tensorflow
